@@ -14,6 +14,9 @@ const errorMessage = ref<string | null>(null);
 const successMessage = ref<string | null>(null);
 const deletionMessage = ref<string | null>(null);
 
+// Filtre sélectionné
+const currentFilter = ref<'all' | 'active' | 'completed'>('all');
+
 // Fonction pour charger les tâches depuis le localStorage
 function loadTasks() {
   const storedTasks = localStorage.getItem('tasks');
@@ -106,6 +109,16 @@ onMounted(() => {
   loadTasks();
 });
 
+// Fonction de filtrage des tâches
+function filteredTasks() {
+  if (currentFilter.value === 'active') {
+    return listTodo.value.filter(todo => !todo.isCompleted);
+  } else if (currentFilter.value === 'completed') {
+    return listTodo.value.filter(todo => todo.isCompleted);
+  }
+  return listTodo.value;  // Retourne toutes les tâches
+}
+
 // Calculer le nombre de tâches restantes
 function getRemainingTasksCount() {
   return listTodo.value.filter(todo => !todo.isCompleted).length;
@@ -136,11 +149,18 @@ function getRemainingTasksCount() {
       <button @click="addTask">Ajouter</button>
     </div>
 
+    <!-- Filtrage des tâches -->
+    <div class="filters">
+      <button @click="currentFilter = 'all'">Toutes</button>
+      <button @click="currentFilter = 'active'">À faire</button>
+      <button @click="currentFilter = 'completed'">Terminées</button>
+    </div>
+
     <!-- Liste des tâches -->
     <ul>
-      <li v-for="(todo, index) in listTodo" :key="todo.id">
+      <li v-for="(todo, index) in filteredTasks()" :key="todo.id">
         <span>{{ todo.title }}</span>
-        <span v-if="todo.dueDate">({{ todo.dueDate.toLocaleDateString() }})</span>
+        <span v-if="todo.dueDate"> ({{ todo.dueDate.toLocaleDateString() }})</span>
         <span v-if="todo.isCompleted"> - Terminé</span>
         <span v-else> - En cours</span>
         <!-- Bouton pour marquer la tâche comme terminée -->
@@ -151,7 +171,7 @@ function getRemainingTasksCount() {
 
     <!-- Footer avec le nombre de tâches restantes -->
     <footer>
-      <h1>TODO</h1>
+      <h1>Nombre de tâches restantes</h1>
       <span>{{ getRemainingTasksCount() }} tâche(s) à faire</span>
     </footer>
   </div>

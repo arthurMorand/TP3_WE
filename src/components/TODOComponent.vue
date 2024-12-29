@@ -119,6 +119,30 @@ function deleteAllTasks() {
   }
 }
 
+// Fonction pour supprimer les tâches terminées
+function deleteCompletedTasks() {
+  const completedTasks = listTodo.value.filter(todo => todo.isCompleted);
+
+  if (completedTasks.length === 0) {
+    deletionMessage.value = 'Aucune tâche terminée à supprimer.';
+    setTimeout(() => {
+      deletionMessage.value = null;
+    }, 3000);
+    return;
+  }
+
+  listTodo.value = listTodo.value.filter(todo => !todo.isCompleted); // Supprimer les tâches terminées
+  saveTasks();
+
+  deletionMessage.value = 'Toutes les tâches terminées ont été supprimées.';
+
+  // Réinitialisation du message après 3 secondes
+  setTimeout(() => {
+    deletionMessage.value = null;
+  }, 3000);
+}
+
+
 // Charger les tâches depuis le localStorage lors du montage du composant
 onMounted(() => {
   loadTasks();
@@ -183,6 +207,7 @@ function getRemainingTasksCount() {
         <button @click="deleteTask(index)">Supprimer</button>
       </li>
       <button @click="deleteAllTasks">Supprimer toutes les tâches</button>
+      <button @click="deleteCompletedTasks">Supprimer les tâches terminées</button>
     </ul>
 
     <!-- Footer avec le nombre de tâches restantes -->

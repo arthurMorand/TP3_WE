@@ -147,9 +147,11 @@ function startEditing(index: number) {
   listTodo.value[index].isEditing = true;
 }
 
-// Fonction pour enregistrer l'édition du titre
-function saveEditedTitle(index: number) {
+// Fonction pour arrêter l'édition et enregistrer la modification
+function stopEditing(index: number) {
   const task = listTodo.value[index];
+
+  // Si le titre a changé, on sauvegarde
   if (task.title.trim() !== '') {
     saveTasks();  // Sauvegarder les tâches après modification
     task.isEditing = false;  // Désactiver le mode d'édition
@@ -223,8 +225,8 @@ function getRemainingTasksCount() {
         <input
           v-if="todo.isEditing"
           v-model="todo.title"
-          @blur="saveEditedTitle(index)"
-          @keyup.enter="saveEditedTitle(index)"
+          @blur="stopEditing(index)"
+          @keyup.enter="stopEditing(index)"
         />
         <span v-if="todo.dueDate"> ({{ todo.dueDate.toLocaleDateString() }})</span>
         <span v-if="todo.isCompleted"> - Terminé</span>

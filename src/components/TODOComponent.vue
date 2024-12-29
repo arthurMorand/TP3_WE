@@ -142,6 +142,24 @@ function deleteCompletedTasks() {
   }, 3000);
 }
 
+// Fonction pour activer l'édition du titre
+function startEditing(index: number) {
+  listTodo.value[index].isEditing = true;
+}
+
+// Fonction pour enregistrer l'édition du titre
+function saveEditedTitle(index: number) {
+  const task = listTodo.value[index];
+  if (task.title.trim() !== '') {
+    saveTasks();  // Sauvegarder les tâches après modification
+    task.isEditing = false;  // Désactiver le mode d'édition
+  } else {
+    errorMessage.value = 'Le titre de la tâche ne peut pas être vide.';
+    setTimeout(() => {
+      errorMessage.value = null;
+    }, 3000);
+  }
+}
 
 // Charger les tâches depuis le localStorage lors du montage du composant
 onMounted(() => {
@@ -198,11 +216,19 @@ function getRemainingTasksCount() {
     <!-- Liste des tâches -->
     <ul>
       <li v-for="(todo, index) in filteredTasks()" :key="todo.id">
-        <span>{{ todo.title }}</span>
+        <!-- Mode édition -->
+        <span v-if="!todo.isEditing" @dblclick="startEditing(index)">
+          {{ todo.title }}
+        </span>
+        <input
+          v-if="todo.isEditing"
+          v-model="todo.title"
+          @blur="saveEditedTitle(index)"
+          @keyup.enter="saveEditedTitle(index)"
+        />
         <span v-if="todo.dueDate"> ({{ todo.dueDate.toLocaleDateString() }})</span>
         <span v-if="todo.isCompleted"> - Terminé</span>
         <span v-else> - En cours</span>
-        <!-- Bouton pour marquer la tâche comme terminée -->
         <button v-if="!todo.isCompleted" @click="markAsCompleted(index)">Terminer</button>
         <button @click="deleteTask(index)">Supprimer</button>
       </li>

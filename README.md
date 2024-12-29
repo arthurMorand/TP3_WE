@@ -72,3 +72,8 @@ npm run lint
 - **Édition de titre de tâche** : Double-cliquer sur le titre d'une tâche permet de la modifier. Un événement `blur` est utilisé pour arrêter l'édition lorsqu'on clique en dehors du champ de saisie.
 - **Filtrage des tâches** : L'utilisateur peut filtrer les tâches selon leur statut (toutes, à faire, terminées).
 - **Persistance dans `localStorage`** : Toutes les tâches sont enregistrées dans le `localStorage`, ce qui permet à l'application de conserver les données même après le rafraîchissement de la page.
+
+## Auteurs
+- Enzo LEROYER
+- Lucas LEPREVOST
+- Arthur MORAND

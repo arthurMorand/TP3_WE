@@ -104,6 +104,21 @@ function markAsCompleted(index: number) {
   }
 }
 
+// Fonction pour supprimer toutes les tâches
+function deleteAllTasks() {
+  if (confirm('Êtes-vous sûr de vouloir supprimer toutes les tâches ?')) {
+    listTodo.value = [];  // Vider la liste des tâches
+    saveTasks();  // Sauvegarder le changement dans le localStorage
+
+    deletionMessage.value = 'Toutes les tâches ont été supprimées.';
+
+    // Réinitialisation du message après 3 secondes
+    setTimeout(() => {
+      deletionMessage.value = null;
+    }, 3000);
+  }
+}
+
 // Charger les tâches depuis le localStorage lors du montage du composant
 onMounted(() => {
   loadTasks();
@@ -167,6 +182,7 @@ function getRemainingTasksCount() {
         <button v-if="!todo.isCompleted" @click="markAsCompleted(index)">Terminer</button>
         <button @click="deleteTask(index)">Supprimer</button>
       </li>
+      <button @click="deleteAllTasks">Supprimer toutes les tâches</button>
     </ul>
 
     <!-- Footer avec le nombre de tâches restantes -->

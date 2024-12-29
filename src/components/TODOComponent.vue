@@ -186,7 +186,7 @@ function getRemainingTasksCount() {
     </ul>
 
     <!-- Footer avec le nombre de tâches restantes -->
-    <footer>
+    <footer v-if="getRemainingTasksCount() > 0">
       <h1>Nombre de tâches restantes</h1>
       <span>{{ getRemainingTasksCount() }} tâche(s) à faire</span>
     </footer>
